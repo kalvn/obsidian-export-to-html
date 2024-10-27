@@ -2,6 +2,7 @@
 import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
 import { parse } from './parser';
 import css from './css';
+import { downloadBlob } from './utils';
 
 const customCss = `
 .markdown-body {
@@ -71,24 +72,4 @@ export default class ExportToHtmlPlugin extends Plugin {
       }
     });
   }
-}
-
-function downloadBlob (blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement('a');
-
-  a.href = url;
-  a.download = filename || 'download';
-
-  const clickHandler = () => {
-    setTimeout(() => {
-      URL.revokeObjectURL(url);
-      this.removeEventListener('click', clickHandler);
-    }, 150);
-  };
-
-  a.addEventListener('click', clickHandler, false);
-
-  a.click();
 }

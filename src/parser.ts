@@ -53,6 +53,11 @@ function findImageFromPath (imagePath: string): TFile | undefined {
   }
 }
 
+/**
+ * Converts a Marked image token to the corresponding image binary formatted as base 64.
+ * @param imageToken A Marked image token.
+ * @returns The image binary as base 64.
+ */
 async function imageTokenToBase64Src (imageToken: Tokens.Image): Promise<string | undefined> {
   if (currentVault === undefined) {
     return;

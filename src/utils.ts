@@ -10,3 +10,23 @@ export function arrayBufferToBase64 (buffer: ArrayBuffer) {
 
   return base64String;
 }
+
+export function downloadBlob (blob: Blob, filename: string) {
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+
+  a.href = url;
+  a.download = filename || 'download';
+
+  const clickHandler = () => {
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+      this.removeEventListener('click', clickHandler);
+    }, 150);
+  };
+
+  a.addEventListener('click', clickHandler, false);
+
+  a.click();
+}
