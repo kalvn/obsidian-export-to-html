@@ -3,9 +3,6 @@ import { arrayBufferToBase64, TFile, Vault } from 'obsidian';
 
 const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'bmp'];
 
-let currentVault: Vault | undefined;
-let currentVaultImages: TFile[] = [];
-
 const tokenizer: TokenizerObject = {
   link (src: string): Tokens.Link | Tokens.Image | undefined {
     const match = src.match(/!\[\[([^[]*)\]\]/);
@@ -46,7 +43,10 @@ marked.use({
 });
 
 function findImageFromPath (imagePath: string): TFile | undefined {
-  for (const image of currentVaultImages) {
+  const vault: Vault = this.app.vault;
+  const images = vault.getFiles().filter(file => IMAGE_EXTENSIONS.includes(file.extension));
+
+  for (const image of images) {
     if (image.path === imagePath || image.name === imagePath) {
       return image;
     }
@@ -59,10 +59,7 @@ function findImageFromPath (imagePath: string): TFile | undefined {
  * @returns The image binary as base 64.
  */
 async function imageTokenToBase64Src (imageToken: Tokens.Image): Promise<string | undefined> {
-  if (currentVault === undefined) {
-    return;
-  }
-
+  const vault: Vault = this.app.vault;
   const decodedHref = decodeURIComponent(imageToken.href);
 
   // console.log(`Parsing image with href [${imageToken.href}].`);
@@ -74,7 +71,7 @@ async function imageTokenToBase64Src (imageToken: Tokens.Image): Promise<string 
     return;
   }
 
-  const buffer = await currentVault.adapter.readBinary(decodeURIComponent(file.path));
+  const buffer = await vault.adapter.readBinary(decodeURIComponent(file.path));
   return `data:image/png;base64,${arrayBufferToBase64(buffer)}`;
 }
 
@@ -83,14 +80,8 @@ async function imageTokenToBase64Src (imageToken: Tokens.Image): Promise<string 
  *
  * Images are transformed in base 64 strings.
  * @param markdownData Markdown string.
- * @param vault The vault to consider for parsing.
  * @returns HTML string
  */
-export async function parse (markdownData: string, vault: Vault): Promise<string> {
-  currentVault = vault;
-  currentVaultImages = vault.getFiles().filter(file => IMAGE_EXTENSIONS.includes(file.extension));
-
-  // console.table(currentVault.getFiles());
-
+export async function parse (markdownData: string): Promise<string> {
   return await marked.parse(markdownData);
 }

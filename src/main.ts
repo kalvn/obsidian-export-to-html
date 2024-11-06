@@ -21,16 +21,14 @@ const customCss = `
 
 export default class ExportToHtmlPlugin extends Plugin {
   async onload () {
-    const { vault } = this.app;
-
     this.addCommand({
       id: 'copy-to-clipboard-as-html',
       name: 'Copy to clipboard as HTML',
       editorCallback: async (editor: Editor, view: MarkdownView) => {
-        const markdownData = await parse(view.data, vault);
+        const contentAsHtml = await parse(view.data);
 
-        const textBlob = new Blob([markdownData], { type: 'text/plain' });
-        const htmlBlob = new Blob([markdownData], { type: 'text/html' });
+        const textBlob = new Blob([contentAsHtml], { type: 'text/plain' });
+        const htmlBlob = new Blob([contentAsHtml], { type: 'text/html' });
 
         const clipboardItem = new ClipboardItem({
           [textBlob.type]: textBlob,
@@ -46,7 +44,7 @@ export default class ExportToHtmlPlugin extends Plugin {
       id: 'download-as-html',
       name: 'Download as an HTML file',
       editorCallback: async (editor: Editor, view: MarkdownView) => {
-        const markdownData = await parse(view.data, vault);
+        const contentAsHtml = await parse(view.data);
 
         const wrappedHtml = `<!doctype html>
   <head>
@@ -59,7 +57,7 @@ export default class ExportToHtmlPlugin extends Plugin {
     </style>
   </head>
   <body class="markdown-body">
-    ${markdownData}
+    ${contentAsHtml}
   </body>
 </html>`;
 
