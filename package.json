@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-export-to-html",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Export your Markdown notes as HTML, directly in the clipboard or as a file.",
   "type": "module",
 	"main": "main.js",
