@@ -1,8 +1,8 @@
 /* eslint-disable no-new */
 import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
-import { parse } from './parser';
 import css from './css';
 import { downloadBlob } from './utils';
+import HtmlRenderer from './HtmlRederer';
 
 const customCss = `
 .markdown-body {
@@ -25,7 +25,8 @@ export default class ExportToHtmlPlugin extends Plugin {
       id: 'copy-to-clipboard-as-html',
       name: 'Copy to clipboard as HTML',
       editorCallback: async (editor: Editor, view: MarkdownView) => {
-        const contentAsHtml = await parse(view.data);
+        const htmlRenderer = new HtmlRenderer(this.app, this);
+        const contentAsHtml = await htmlRenderer.render(view.data);
 
         const textBlob = new Blob([contentAsHtml], { type: 'text/plain' });
         const htmlBlob = new Blob([contentAsHtml], { type: 'text/html' });
@@ -44,7 +45,8 @@ export default class ExportToHtmlPlugin extends Plugin {
       id: 'download-as-html',
       name: 'Download as an HTML file',
       editorCallback: async (editor: Editor, view: MarkdownView) => {
-        const contentAsHtml = await parse(view.data);
+        const htmlRenderer = new HtmlRenderer(this.app, this);
+        const contentAsHtml = await htmlRenderer.render(view.data);
 
         const wrappedHtml = `<!doctype html>
   <head>
