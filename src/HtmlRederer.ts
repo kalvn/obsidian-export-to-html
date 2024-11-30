@@ -48,6 +48,12 @@ export default class HtmlRenderer {
     const el = document.body.createDiv();
     await MarkdownRenderer.render(this.app, markdownContent, el, '.', this.component);
 
+    // Remove copy-code buttons.
+    el.querySelectorAll('.copy-code-button').forEach(e => {
+      e.remove();
+    });
+
+    // Convert images to base 64 strings.
     el.querySelectorAll('img').forEach(async (img) => {
       const src = img.src;
       if (src !== null && src !== undefined) {
