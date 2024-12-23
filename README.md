@@ -1,9 +1,11 @@
-# Obsidian Export to HTML
-This [Obsidian](https://obsidian.md) plugin allows you to export the content of a note as HTML, either to the clipboard or to a new HTML file.
+# Export to HTML for Obsidian
+This [Obsidian](https://obsidian.md) community plugin allows you to export the content of a note as HTML, either to the clipboard or to a new HTML file.
 
 During the export, images will be copied over in base 64 format.
 
 This plugin is a work in progress but it already works great in most cases. Some edge cases with inline image exports will be improved.
+
+Obsidian mobile apps are **not yet supported**.
 
 ## Installation
 Follow the steps below to install **Obsidian Export to HTML**.
@@ -24,11 +26,10 @@ Open the command palette (press <key>CTRL+P</key> if you use a keyboard) and typ
 
 ## How to contribute
 - Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
+- Make sure you use [Node](https://nodejs.org) version 16 or above (`node --version`).
+- `npm install` to install dependencies.
 - `npm run dev` to start compilation in watch mode.
 
 ## External packages used
 - Starter template: [Obsidian sample plugin](https://github.com/obsidianmd/obsidian-sample-plugin)
-- Markdown to HTML: [Marked](https://github.com/markedjs/marked)
 - CSS: [Github Markdown CSS](https://github.com/sindresorhus/github-markdown-css)
