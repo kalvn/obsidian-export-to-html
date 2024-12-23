@@ -2,7 +2,7 @@
 import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
 import css from './css';
 import { downloadBlob } from './utils';
-import HtmlRenderer from './HtmlRederer';
+import HtmlRenderer from './HtmlRenderer';
 
 const customCss = `
 .markdown-body {
