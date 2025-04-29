@@ -54,18 +54,22 @@ export default class HtmlRenderer {
     });
 
     // Convert images to base 64 strings.
-    el.querySelectorAll('img').forEach(async (img) => {
+    const imgElements = Array.from(el.querySelectorAll('img'));
+    const imgPromises = imgElements.map(async (img) => {
       const src = img.src;
       if (src !== null && src !== undefined) {
         img.src = await this.convertImageToBase64String(src);
       }
     });
 
+    // Wait for all image conversions to complete
+    await Promise.all(imgPromises);
+
     /**
      * Wait some time to let the browser finish the painting flow.
      * Explanation: https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous/
      */
-    await new Promise((resolve, reject) => {
+    await new Promise((resolve) => {
       setTimeout(() => {
         resolve(null);
       }, 100);
