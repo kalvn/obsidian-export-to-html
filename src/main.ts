@@ -36,7 +36,13 @@ export default class ExportToHtmlPlugin extends Plugin {
           [htmlBlob.type]: htmlBlob,
         });
 
-        await navigator.clipboard.write([clipboardItem]);
+        try {
+          await window.navigator.clipboard.write([clipboardItem]);
+        } catch (err) {
+          new Notice(`Content could not be copied to clipboard. [${err.message}].`);
+          return;
+        }
+
         new Notice('HTML content copied to clipboard!');
       }
     });
