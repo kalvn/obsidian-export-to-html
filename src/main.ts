@@ -1,23 +1,10 @@
 /* eslint-disable no-new */
 import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
-import css from './css';
+import css from './css/base';
+import customCss from './css/custom';
 import { downloadBlob } from './utils';
 import HtmlRenderer from './HtmlRenderer';
-
-const customCss = `
-.markdown-body {
-  box-sizing: border-box;
-  min-width: 200px;
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 45px;
-}
-
-@media (max-width: 767px) {
-  .markdown-body {
-    padding: 15px;
-  }
-}`;
+import mathFonts from './css/mathFonts';
 
 export default class ExportToHtmlPlugin extends Plugin {
   async onload () {
@@ -54,6 +41,13 @@ export default class ExportToHtmlPlugin extends Plugin {
         const htmlRenderer = new HtmlRenderer(this.app, this);
         const contentAsHtml = await htmlRenderer.render(view.data);
 
+        const mathCss = document.head.querySelector('#MJX-CHTML-styles')?.innerHTML;
+        let modifiedMathCss = mathCss;
+
+        for (const [key, value] of Object.entries(mathFonts)) {
+          modifiedMathCss = modifiedMathCss?.replace(`app://obsidian.md/lib/mathjax/output/chtml/fonts/woff-v2/${key}`, value);
+        }
+
         const wrappedHtml = `<!doctype html>
   <head>
     <meta charset="UTF-8">
@@ -62,6 +56,7 @@ export default class ExportToHtmlPlugin extends Plugin {
     <style>
       ${css}
       ${customCss}
+      ${modifiedMathCss}
     </style>
   </head>
   <body class="markdown-body">
