@@ -22,6 +22,7 @@ export function downloadBlob (blob: Blob, filename: string) {
   const clickHandler = () => {
     setTimeout(() => {
       URL.revokeObjectURL(url);
+      // @ts-expect-error `this` is unknown to TS in this context.
       this.removeEventListener('click', clickHandler);
     }, 150);
   };

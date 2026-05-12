@@ -1,8 +1,8 @@
 /* eslint-disable no-new */
-import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
-import css from './css';
-import { downloadBlob } from './utils';
-import HtmlRenderer from './HtmlRenderer';
+import { Editor, MarkdownFileInfo, MarkdownView, Notice, Plugin } from 'obsidian';
+import css from './css.js';
+import { downloadBlob } from './utils.js';
+import HtmlRenderer from './HtmlRenderer.js';
 
 const customCss = `
 .markdown-body {
@@ -24,7 +24,9 @@ export default class ExportToHtmlPlugin extends Plugin {
     this.addCommand({
       id: 'copy-to-clipboard-as-html',
       name: 'Copy to clipboard as HTML',
-      editorCallback: async (editor: Editor, view: MarkdownView) => {
+      editorCallback: async (editor: Editor, view: MarkdownView | MarkdownFileInfo) => {
+        if (!('data' in view)) return;
+
         const htmlRenderer = new HtmlRenderer(this.app, this);
         const contentAsHtml = await htmlRenderer.render(view.data);
 
@@ -39,7 +41,7 @@ export default class ExportToHtmlPlugin extends Plugin {
         try {
           await window.navigator.clipboard.write([clipboardItem]);
         } catch (err) {
-          new Notice(`Content could not be copied to clipboard. [${err.message}].`);
+          new Notice(`Content could not be copied to clipboard. [${err instanceof Error ? err.message : 'unknown'}].`);
           return;
         }
 
@@ -50,7 +52,9 @@ export default class ExportToHtmlPlugin extends Plugin {
     this.addCommand({
       id: 'download-as-html',
       name: 'Download as an HTML file',
-      editorCallback: async (editor: Editor, view: MarkdownView) => {
+      editorCallback: async (editor: Editor, view: MarkdownView | MarkdownFileInfo) => {
+        if (!('data' in view)) return;
+
         const htmlRenderer = new HtmlRenderer(this.app, this);
         const contentAsHtml = await htmlRenderer.render(view.data);
 
