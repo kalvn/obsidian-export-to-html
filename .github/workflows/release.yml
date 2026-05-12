@@ -1,5 +1,10 @@
 name: Release Obsidian plugin
 
+permissions:
+  id-token: write
+  contents: read
+  attestations: write
+
 on:
   push:
     tags:
@@ -21,6 +26,11 @@ jobs:
         run: |
           npm install
           npm run build
+
+      - name: Generate artifact attestation
+        uses: actions/attest@v4
+        with:
+          subject-path: 'main.js'
 
       - name: Create release
         env:
