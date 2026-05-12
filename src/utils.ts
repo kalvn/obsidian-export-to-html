@@ -14,13 +14,13 @@ export function arrayBufferToBase64 (buffer: ArrayBuffer) {
 export function downloadBlob (blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
 
-  const a = document.createElement('a');
+  const a = createEl('a');
 
   a.href = url;
   a.download = filename || 'download';
 
   const clickHandler = () => {
-    setTimeout(() => {
+    activeWindow.setTimeout(() => {
       URL.revokeObjectURL(url);
       // @ts-expect-error `this` is unknown to TS in this context.
       this.removeEventListener('click', clickHandler);

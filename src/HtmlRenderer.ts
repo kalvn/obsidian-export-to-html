@@ -45,7 +45,7 @@ export default class HtmlRenderer {
   }
 
   async render (markdownContent: string): Promise<string> {
-    const el = document.body.createDiv();
+    const el = activeDocument.body.createDiv();
     await MarkdownRenderer.render(this.app, markdownContent, el, '.', this.component);
 
     // Remove copy-code buttons.
@@ -54,7 +54,7 @@ export default class HtmlRenderer {
     });
 
     // Convert images to base 64 strings.
-    el.querySelectorAll('img').forEach(async (img) => {
+    el.querySelectorAll('img').forEach(async (img): Promise<void> => {
       const src = img.src;
       if (src !== null && src !== undefined) {
         img.src = await this.convertImageToBase64String(src);
@@ -65,8 +65,8 @@ export default class HtmlRenderer {
      * Wait some time to let the browser finish the painting flow.
      * Explanation: https://macarthur.me/posts/when-dom-updates-appear-to-be-asynchronous/
      */
-    await new Promise((resolve, reject) => {
-      setTimeout(() => {
+    await new Promise((resolve) => {
+      activeWindow.setTimeout(() => {
         resolve(null);
       }, 100);
     });

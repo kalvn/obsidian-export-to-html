@@ -21,7 +21,6 @@
 	"license": "MIT",
 	"devDependencies": {
 		"@types/node": "^24.7.4",
-		"builtin-modules": "^5.0.0",
 		"esbuild": "^0.28.0",
 		"eslint": "^9.11.1",
 		"neostandard": "^0.13.0",

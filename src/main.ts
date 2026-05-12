@@ -1,4 +1,4 @@
-/* eslint-disable no-new */
+/* eslint-disable no-new -- Required for notices, as ESLint disallow new operators outside of assignments or comparisons. */
 import { Editor, MarkdownFileInfo, MarkdownView, Notice, Plugin } from 'obsidian';
 import css from './css.js';
 import { downloadBlob } from './utils.js';
@@ -24,7 +24,7 @@ export default class ExportToHtmlPlugin extends Plugin {
     this.addCommand({
       id: 'copy-to-clipboard-as-html',
       name: 'Copy to clipboard as HTML',
-      editorCallback: async (editor: Editor, view: MarkdownView | MarkdownFileInfo) => {
+      editorCallback: async (_editor: Editor, view: MarkdownView | MarkdownFileInfo) => {
         if (!('data' in view)) return;
 
         const htmlRenderer = new HtmlRenderer(this.app, this);
@@ -52,7 +52,7 @@ export default class ExportToHtmlPlugin extends Plugin {
     this.addCommand({
       id: 'download-as-html',
       name: 'Download as an HTML file',
-      editorCallback: async (editor: Editor, view: MarkdownView | MarkdownFileInfo) => {
+      editorCallback: async (_editor: Editor, view: MarkdownView | MarkdownFileInfo) => {
         if (!('data' in view)) return;
 
         const htmlRenderer = new HtmlRenderer(this.app, this);
